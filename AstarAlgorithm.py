@@ -3,7 +3,7 @@ from final_project_part1 import DirectedWeightedGraph
 from min_heap2 import MinHeap, Element
 import math
 
-# Function to calculate Haversine distance between two coordinates
+# Function to calculate distance between two coordinates (Haversine)
 def calculate_distance(coord1, coord2):
     R = 6371  # Earth radius in kilometers
     lat1, lon1 = coord1
@@ -46,6 +46,8 @@ def a_star(G, start, goal, h):
                 Q.decrease_key(neighbour, alt + h.get(neighbour, float('inf')))
 
     path = reconstruct_path(pred, start, goal)
+    if path[-1] == start:
+        print("There is no path between the two given nodes.")
     return pred, path
 
 # Function to reconstruct the shortest path
@@ -86,9 +88,9 @@ for row in connections_data:
 # Node information for heuristic function
 nodes_info = {int(row[0]): (float(row[1]), float(row[2])) for row in stations_data}  # Adjust indices for latitude and longitude
 
-# Define start and goal nodes
-start_node = 1  # Replace with actual start node ID
-goal_node = 17  # Replace with actual goal node ID
+# Define start and goal nodes for testing
+start_node = 11 
+goal_node = 83  
 
 # Heuristic function for each node
 h = {node: heuristic(node, goal_node, nodes_info) for node in G.adj}
@@ -98,4 +100,3 @@ pred, path = a_star(G, start_node, goal_node, h)
 
 # Output the shortest path
 print("Shortest path from {} to {}: {}".format(start_node, goal_node, path))
-
