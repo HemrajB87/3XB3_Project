@@ -114,3 +114,44 @@ def init_d(G):
                 d[i][j] = G.w(i, j)
         d[i][i] = 0
     return d
+
+# Part 1
+def dijkstra_approx(G, source, k):
+    pred = {}
+    dist = {}
+    Q = min_heap.MinHeap([])
+    nodes = list(G.adj.keys())
+
+    for node in nodes:
+        Q.insert(min_heap.Element(node, float("inf")))
+        dist[node] = float("inf")
+    Q.decrease_key(source, 0)
+
+    while not Q.is_empty():
+        current_element = Q.extract_min()
+        current_node = current_element.value
+        dist[current_node] = current_element.key
+        for neighbour in G.adj[current_node]:
+            if dist[current_node] + G.w(current_node, neighbour) < dist[neighbour] and pred.get(neighbour, -1) != current_node and dist[current_node] < k:
+                Q.decrease_key(neighbour, dist[current_node] + G.w(current_node, neighbour))
+                dist[neighbour] = dist[current_node] + G.w(current_node, neighbour)
+                pred[neighbour] = current_node
+    return dist
+
+# Part 1
+def bellman_ford_approx(G, source, k):
+    pred = {}
+    dist = {}
+    nodes = list(G.adj.keys())
+
+    for node in nodes:
+        dist[node] = float("inf")
+    dist[source] = 0
+
+    for _ in range(k):
+        for node in nodes:
+            for neighbour in G.adj[node]:
+                if dist[neighbour] > dist[node] + G.w(node, neighbour) and dist[node] < k:
+                    dist[neighbour] = dist[node] + G.w(node, neighbour)
+                    pred[neighbour] = node
+    return dist
