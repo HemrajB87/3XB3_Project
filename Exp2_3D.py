@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import time
-import AstarAlgorithm as Astar
-from final_project_part1 import DirectedWeightedGraph, dijkstra
 from itertools import combinations
+from final_project_part1 import DirectedWeightedGraph, dijkstra
+import AstarAlgorithm as Astar
 
-def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=3):
+def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
     dijkstra_times = []
     a_star_times = []
 
@@ -29,13 +29,13 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=3)
 
     return avg_dijkstra_time, avg_a_star_time
 
-def plot_results_3d(dijkstra_times, a_star_times, start_node, goal_node):
+def plot_results_3d(dijkstra_times, a_star_times, start_nodes, goal_nodes):
     fig = plt.figure(figsize=(12, 8))
     ax = fig.add_subplot(111, projection='3d')
 
-    for i, station in enumerate(start_node):
-        ax.scatter(station, goal_node, dijkstra_times[i], c='b', marker='o', label='Dijkstra')
-        ax.scatter(station, goal_node, a_star_times[i], c='r', marker='x', label='A*')
+    for i, (start_node, goal_node) in enumerate(zip(start_nodes, goal_nodes)):
+        ax.scatter(start_node, goal_node, dijkstra_times[i], c='b', marker='o', label='Dijkstra')
+        ax.scatter(start_node, goal_node, a_star_times[i], c='r', marker='x', label='A*')
 
     ax.set_xlabel('Starting Node')
     ax.set_ylabel('Goal Node')
@@ -65,15 +65,16 @@ def main():
     dijkstra_runtimes = []
     a_star_runtimes = []
     stations = list(graph.adj.keys())
+
     # Iterate over unique combinations of start and goal nodes
     for start_node, goal_node in combinations(stations, 2):
         print(f"Running experiment for station {start_node} and goal node {goal_node}")
         avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
         dijkstra_runtimes.append(avg_dijkstra_time)
         a_star_runtimes.append(avg_a_star_time)
-        
+
     # Plot results
-    plot_results_3d(dijkstra_runtimes, a_star_runtimes, stations)
+    plot_results_3d(dijkstra_runtimes, a_star_runtimes, stations, stations)
 
 if __name__ == "__main__":
     main()
