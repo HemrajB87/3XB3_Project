@@ -1,7 +1,8 @@
 # A_Star adapter class
+import sys
+sys.path.append('./')
 from AstarAlgorithm import a_star, heuristic
 from SPAlgorithm import SPAlgorithm
-
 
 class A_Star_Adapter(SPAlgorithm):
     def __init__(self, nodes_info):

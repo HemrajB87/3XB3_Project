@@ -1,4 +1,6 @@
 from SPAlgorithm import SPAlgorithm
+import sys
+sys.path.append('./')
 from final_project_part1 import bellman_ford
 
 class Bellman_Ford(SPAlgorithm):
