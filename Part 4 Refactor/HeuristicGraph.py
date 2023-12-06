@@ -1,4 +1,3 @@
-from typing import Dict
 import WeightedGraph
 
 
@@ -7,5 +6,5 @@ class HeuristicGraph(WeightedGraph):
         super().__init__()
         self.heuristic = {}
 
-    def get_heuristic(self, node: int) -> Dict[int, float]:
+    def get_heuristic(self, node: int) -> dict[int, float]:
         return self.heuristic

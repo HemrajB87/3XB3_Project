@@ -1,4 +1,3 @@
-from typing import List, Dict, Tuple
 import Graph
 
 class WeightedGraph(Graph):
@@ -13,7 +12,7 @@ class WeightedGraph(Graph):
         self.adj[start].append(end)
         self.weights[(start, end)] = weight
 
-    def get_adjacent_nodes(self, node: int) -> List[int]:
+    def get_adjacent_nodes(self, node: int) -> list[int]:
         return self.adj[node]
 
     def get_number_of_nodes(self) -> int:
