@@ -1,5 +1,8 @@
+from abc import ABC, abstractmethod
+
+
 class SPAlgorithm(ABC):
 
     @abstractmethod
-    def calculate_spl(self, graph: Graph, source: int, destination: int) -> float:
+    def calculate_spl(self, graph, source, destination):
         pass
