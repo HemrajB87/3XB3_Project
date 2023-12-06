@@ -1,3 +1,6 @@
+from typing import List, Dict, Tuple
+import Graph
+
 class WeightedGraph(Graph):
     def __init__(self):
         self.adj = {}

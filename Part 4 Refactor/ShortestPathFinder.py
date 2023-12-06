@@ -1,3 +1,6 @@
+import SPAlgorithm
+import Graph
+
 class ShortPathFinder:
     def __init__(self):
         self.graph = None
