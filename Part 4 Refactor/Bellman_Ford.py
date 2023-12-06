@@ -1,4 +1,4 @@
-import SPAlgorithm
+from SPAlgorithm import SPAlgorithm
 from final_project_part1 import bellman_ford
 
 class Bellman_Ford(SPAlgorithm):

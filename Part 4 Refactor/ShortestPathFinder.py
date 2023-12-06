@@ -1,4 +1,4 @@
-import SPAlgorithm
+from SPAlgorithm import SPAlgorithm
 import Graph
 
 class ShortPathFinder:

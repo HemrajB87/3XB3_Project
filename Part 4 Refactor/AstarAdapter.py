@@ -1,6 +1,6 @@
 # A_Star adapter class
 from AstarAlgorithm import a_star, heuristic
-import SPAlgorithm
+from SPAlgorithm import SPAlgorithm
 
 
 class A_Star_Adapter(SPAlgorithm):

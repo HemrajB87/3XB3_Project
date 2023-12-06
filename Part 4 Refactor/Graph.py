@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict
 
 class Graph(ABC):
 
@@ -12,7 +11,7 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def get_adjacent_nodes(self, node: int) -> List[int]:
+    def get_adjacent_nodes(self, node: int) -> list[int]:
         pass
 
     @abstractmethod

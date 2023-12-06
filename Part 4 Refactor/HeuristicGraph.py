@@ -1,4 +1,4 @@
-import WeightedGraph
+from WeightedGraph import WeightedGraph
 
 
 class HeuristicGraph(WeightedGraph):
