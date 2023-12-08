@@ -14,16 +14,19 @@ def bsp_value(L, m):
     # Fill the dp array
     for i in range(1, n):
         for j in range(1, min(i+1, m+1)):
-            # If we remove this station, calculate the new gap
-            if i - j > 0 and i < n-2:  # Ensure there are stations on both sides
-                new_gap = diff[i-1] + diff[i]  # Gap created by removing this station
-                left_gap = dp[i-1][j-1]  # Maximum gap with one less removal to the left
-                dp[i][j] = min(dp[i][j], max(left_gap, new_gap))
-            elif i - j > 0:  # Edge case: removing the last station
-                dp[i][j] = dp[i-1][j-1]
+            # Calculate new gap if this station is removed
+            if i < n - 1:
+                new_gap = diff[i-1] + diff[i] if i - j > 0 else diff[i-1]
+            else:
+                new_gap = diff[i-1]  # For the last station
 
-            # If we keep this station, the maximum gap is the max of the gap to the left and the current gap.
+            # Update dp values considering both cases: removing or keeping the station
+            if i - j > 0:
+                dp[i][j] = min(dp[i][j], max(dp[i-1][j-1], new_gap))
             dp[i][j] = min(dp[i][j], max(dp[i-1][j], diff[i-1]))
+
+            print(f"dp[{i}][{j}]: {dp[i][j]}")
+
 
             # Debugging print statements
             print(f"dp[{i}][{j}] after considering station {i+1}: {dp[i][j]}")
@@ -42,7 +45,7 @@ def bsp_solution(L, m):
     # Reconstruct the solution by choosing elements that do not exceed the max_gap
     last_added = L[0]
     for i in range(1, n):
-        if L[i] - last_added <= max_gap and m > 0:
+        if L[i] - last_added + 1 <= max_gap and m > 0:
             # potentially remove this element, decrement m
             m -= 1
             #print(f"Removing element {L[i]}")
