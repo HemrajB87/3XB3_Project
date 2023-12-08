@@ -1,9 +1,4 @@
 def bsp_value(L, m):
-    """
-    Takes in a list of sorted (increasing) numbers and an integer value m.
-    Returns the minimum possible value of the maximum difference between
-    consecutive numbers after removing m elements.
-    """
     n = len(L)
     # The difference array stores the gaps between consecutive elements
     diff = [L[i+1] - L[i] for i in range(n-1)]
@@ -27,14 +22,9 @@ def bsp_value(L, m):
         print(f"dp[{i}]: {dp[i]}")
     
     print(f"Final DP Table: {dp}")
-    # The answer is the minimum possible maximum gap after considering all elements
-    # and removing m elements
-    return dp[n-2][m]
+    return min(dp[i][m] for i in range(m, n))
 
 def bsp_solution(L, m):
-    """
-    Reconstructs the solution list based on the dp array from bsp_value.
-    """
     n = len(L)
     max_gap = bsp_value(L, m)
     print(f"Maximum gap allowed: {max_gap}")
