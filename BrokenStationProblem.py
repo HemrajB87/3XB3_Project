@@ -25,41 +25,65 @@ def bsp_value(L, m):
                 dp[i][j] = min(dp[i][j], max(dp[i-1][j-1], new_gap))
             dp[i][j] = min(dp[i][j], max(dp[i-1][j], diff[i-1]))
 
-            print(f"dp[{i}][{j}]: {dp[i][j]}")
+            #print(f"dp[{i}][{j}]: {dp[i][j]}")
 
 
             # Debugging print statements
-            print(f"dp[{i}][{j}] after considering station {i+1}: {dp[i][j]}")
+            #print(f"dp[{i}][{j}] after considering station {i+1}: {dp[i][j]}")
 
 
     
-    print(f"Final DP Table: {dp}")
+    #print(f"Final DP Table: {dp}")
     return min(dp[i][m] for i in range(m, n))
 
 def bsp_solution(L, m):
     n = len(L)
     max_gap = bsp_value(L, m)
-    #print(f"Maximum gap allowed: {max_gap}")
-    solution = [L[0]]  # always include the first element
-    
-    # Reconstruct the solution by choosing elements that do not exceed the max_gap
+    solution = [L[0]]  # Always include the first element
+
+    # Consider elements from the second to the second-last
     last_added = L[0]
-    for i in range(1, n):
+    for i in range(1, n - 1):
         if L[i] - last_added + 1 <= max_gap and m > 0:
-            # potentially remove this element, decrement m
-            m -= 1
-            #print(f"Removing element {L[i]}")
+            m -= 1  # Remove this element
         else:
-            # add this element to the solution
-            solution.append(L[i])
+            solution.append(L[i])  # Keep this element
             last_added = L[i]
-            #print(f"Adding element {L[i]}")
-    
+
+    solution.append(L[-1])  # Always include the last element
     return solution
 
 
-# Example usage:
-value = bsp_value([2, 4, 6, 7, 10, 14], 2)
-solution = bsp_solution([2, 4, 6, 7, 10, 14], 2)
-print(f"Value: {value}")
-print(f"Solution: {solution}")
+
+# List of test cases
+test_cases = [
+    ([1, 2, 3, 4, 5], 2),
+    ([1, 3, 6, 10, 15], 1),
+    ([5, 5, 5, 5, 5], 2),
+    ([1, 2, 3, 4, 10], 1),
+    ([10, 20, 30, 40, 50], 3),
+    ([1, 10, 20, 30, 40, 50], 2),
+    ([5, 6, 7, 12, 13, 14], 1),
+    ([1, 3, 7, 9, 11, 13], 2),
+    ([2, 4, 6, 8, 10, 12, 14], 3),
+    ([1, 1, 2, 3, 5, 8, 13, 21], 2),
+    ([1, 100, 200, 300, 400, 500], 3),
+    ([1, 2], 1),
+    ([1], 0),
+    ([1, 3, 6, 10, 11, 12, 13, 15], 3),
+    ([1, 2, 3, 5, 8, 13, 21, 34, 55], 4),
+    ([5, 10, 15, 20, 25, 30, 35], 2),
+    ([10, 12, 14, 15, 16, 18, 20], 2),
+    ([1, 3, 6, 10, 15, 21, 28], 3),
+    ([10, 20, 30, 40, 50, 60, 70, 80, 90, 100], 5),
+    ([1, 2, 4, 8, 16, 32, 64], 2)
+]
+
+# Run the test cases
+for i, (L, m) in enumerate(test_cases):
+    value = bsp_value(L, m)
+    solution = bsp_solution(L, m)
+    print(f"Test Case {i+1}: L = {L}, m = {m}")
+    print(f"  Value: {value}")
+    print(f"  Solution: {solution}\n")
+
