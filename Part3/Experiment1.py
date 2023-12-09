@@ -67,8 +67,8 @@ def main():
     # Run experiments
     dijkstra_runtimes = []
     a_star_runtimes = []
-    start_nodes = [1, 10, 20]  # Specify specific start nodes
-    goal_nodes = [5, 15, 25]  # Specify specific goal nodes
+    start_nodes = [1,10,20,30,40,50,60]  # Specify specific start nodes
+    goal_nodes = [65,55,45,35,25,15,5]  # Specify specific goal nodes
 
     # Iterate over specified start and goal nodes
     for start_node, goal_node in zip(start_nodes, goal_nodes):

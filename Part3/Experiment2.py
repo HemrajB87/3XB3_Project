@@ -8,8 +8,9 @@ sys.path.append('./')
 import AstarAlgorithm as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
+import numpy as np
 
-# Compute random 500 node pairs
+# Compute random 1000 node pairs
 def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
     dijkstra_times = []
     a_star_times = []
@@ -36,17 +37,18 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
 def plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes):
     plt.figure(figsize=(12, 8))
 
-    # Plot Dijkstra runtimes as a blue line
-    plt.plot(range(len(start_nodes)), dijkstra_runtimes, 'b-', marker='o', label='Dijkstra')
+    # Plot Dijkstra runtimes as a blue line without markers
+    plt.plot(range(len(start_nodes)), dijkstra_runtimes, 'b-', label='Dijkstra')
 
-    # Plot A* runtimes as a red line
-    plt.plot(range(len(start_nodes)), a_star_runtimes, 'r-', marker='x', label='A*')
+    # Plot A* runtimes as a red line without markers
+    plt.plot(range(len(start_nodes)), a_star_runtimes, 'r-', label='A*')
 
     plt.xlabel('Experiment Index')
     plt.ylabel('Runtime (seconds)')
     plt.title('Dijkstra vs A* Runtime Comparison')
     plt.legend()
     plt.show()
+
 
 
 def main():
@@ -65,21 +67,24 @@ def main():
     # Node information for heuristic function
     nodes_info = {int(row[0]): (float(row[1]), float(row[2])) for row in stations_data}
 
-    # Run experiments
+    # Run experiments for 100 randomly selected start and goal node pairs
     dijkstra_runtimes = []
     a_star_runtimes = []
-    start_nodes = [1, 10, 20]  # Specify specific start nodes
-    goal_nodes = [5, 15, 25]  # Specify specific goal nodes
+    num_experiments = 1000
 
-    # Iterate over specified start and goal nodes
-    for start_node, goal_node in zip(start_nodes, goal_nodes):
-        print(f"Running experiment for station {start_node} and goal node {goal_node}")
+    for _ in range(num_experiments):
+        # Convert graph.adj.keys() to a list before random selection
+        node_list = list(graph.adj.keys())
+        start_node = np.random.choice(node_list)
+        goal_node = np.random.choice(node_list)
+
+        print(f"Running experiment for random start node {start_node} and goal node {goal_node}")
         avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
         dijkstra_runtimes.append(avg_dijkstra_time)
         a_star_runtimes.append(avg_a_star_time)
 
     # Plot results
-    plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes)
+    plot_results(range(num_experiments), range(num_experiments), dijkstra_runtimes, a_star_runtimes)
 
 if __name__ == "__main__":
     main()

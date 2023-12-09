@@ -73,7 +73,7 @@ def main():
     
     # Specify the start and end node indices for the line
     start_index = 1
-    end_index = 30
+    end_index = 150
     
     # Generate node pairs along the line
     start_goal_pairs = [(i, i+1) for i in range(start_index, end_index)]
