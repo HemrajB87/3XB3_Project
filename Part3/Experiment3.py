@@ -37,15 +37,19 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
 def plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes):
     plt.figure(figsize=(12, 8))
 
-    for i, (start_node, goal_node) in enumerate(zip(start_nodes, goal_nodes)):
-        plt.scatter(i, dijkstra_runtimes[i], c='b', marker='o', label=f'Dijkstra {start_node}-{goal_node}')
-        plt.scatter(i, a_star_runtimes[i], c='r', marker='x', label=f'A* {start_node}-{goal_node}')
+    # Create an index array for the x-axis
+    indices = list(range(len(start_nodes)))
+
+    # Plot Dijkstra and A* times as line graphs
+    plt.plot(indices, dijkstra_runtimes, 'b-o', label='Dijkstra')  # Blue line with circle markers
+    plt.plot(indices, a_star_runtimes, 'r-x', label='A*')  # Red line with x markers
 
     plt.xlabel('Experiment Index')
     plt.ylabel('Runtime (seconds)')
     plt.title('Dijkstra vs A* Runtime Comparison')
     plt.legend()
     plt.show()
+
 
 def main():
     # Load CSV data
