@@ -9,7 +9,7 @@ import AstarAlgorithm as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
 
-def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
+def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=100):
     dijkstra_times = []
     a_star_times = []
     for _ in range(num_measurements):
