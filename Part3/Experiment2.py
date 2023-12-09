@@ -11,7 +11,7 @@ from final_project_part1 import DirectedWeightedGraph
 import numpy as np
 
 # Compute random 1000 node pairs
-def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
+def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=10):
     dijkstra_times = []
     a_star_times = []
     for _ in range(num_measurements):
