@@ -216,7 +216,7 @@ def main():
     if dijkstra_runtimes:
         plot_results(list(range(0, len(dijkstra_runtimes) * jump, jump)), dijkstra_runtimes, a_star_runtimes, "Adjacent Line Scenario")
 
-    jump = 750
+    jump = 1500
     # Scenario 3: Stations requiring multiple transfers
     transfer_pairs = get_station_pairs_requiring_transfers(connections_data)
     for index, (start_node, goal_node) in enumerate(transfer_pairs):
@@ -227,7 +227,7 @@ def main():
             dijkstra_runtimes.append(avg_dijkstra_time)
             a_star_runtimes.append(avg_a_star_time)
     if dijkstra_runtimes:
-        plot_results(list(range(0, len(dijkstra_runtimes) * jump, jump)), dijkstra_runtimes, a_star_runtimes, "Adjacent Line Scenario")
+        plot_results(list(range(0, len(dijkstra_runtimes) * jump, jump)), dijkstra_runtimes, a_star_runtimes, "Stations Requiring Transfers")
 
 if __name__ == "__main__":
     main()
