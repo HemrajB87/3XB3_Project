@@ -196,14 +196,14 @@ def main():
     a_star_runtimes = []
 
     # Scenario 1: Stations on the same line
-    #same_line_stations = get_stations_on_same_line(connections_data, 1)
-    #run_and_plot_scenario(graph, nodes_info, same_line_stations, "Same Line Scenario")
+    same_line_stations = get_stations_on_same_line(connections_data, 1)
+    run_and_plot_scenario(graph, nodes_info, same_line_stations, "Same Line Scenario")
 
     # Scenario 2: Stations on adjacent lines
-    '''adjacent_line_pairs = get_adjacent_line_pairs(connections_data)
+    adjacent_line_pairs = get_adjacent_line_pairs(connections_data)
 
     # Define the jump value
-    jump = 100
+    jump = 300
 
     for index, (start_node, goal_node) in enumerate(adjacent_line_pairs):
         # Only run experiments at multiples of the jump value
@@ -215,10 +215,19 @@ def main():
     
     if dijkstra_runtimes:
         plot_results(list(range(0, len(dijkstra_runtimes) * jump, jump)), dijkstra_runtimes, a_star_runtimes, "Adjacent Line Scenario")
-'''
+
+    jump = 750
     # Scenario 3: Stations requiring multiple transfers
     transfer_pairs = get_station_pairs_requiring_transfers(connections_data)
-    run_and_plot_scenario(graph, nodes_info, transfer_pairs, "Transfer Scenario")
+    for index, (start_node, goal_node) in enumerate(transfer_pairs):
+        # Only run experiments at multiples of the jump value
+        if index % jump == 0:
+            print(f"Running {index}-th experiment for station {start_node} to {goal_node}")
+            avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
+            dijkstra_runtimes.append(avg_dijkstra_time)
+            a_star_runtimes.append(avg_a_star_time)
+    if dijkstra_runtimes:
+        plot_results(list(range(0, len(dijkstra_runtimes) * jump, jump)), dijkstra_runtimes, a_star_runtimes, "Adjacent Line Scenario")
 
 if __name__ == "__main__":
     main()
