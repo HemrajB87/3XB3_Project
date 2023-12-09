@@ -157,22 +157,20 @@ def is_direct_path(graph, start, end):
     # If BFS completes without finding the end station, return False
     return False
 
-def run_and_plot_scenario(graph, nodes_info, station_pairs, title, jump=1):
+def run_and_plot_scenario(graph, nodes_info, station_pairs, title):
     dijkstra_runtimes = []
     a_star_runtimes = []
     indices = []
 
     for index, (start_node, goal_node) in enumerate(station_pairs):
-        if index % jump == 0:  # Check if the index is a multiple of 'jump'
-            print(f"Running {title.lower()} experiment for station {start_node} to {goal_node}")
-            avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
-            dijkstra_runtimes.append(avg_dijkstra_time)
-            a_star_runtimes.append(avg_a_star_time)
-            indices.append(index)
+        print(f"Running {title.lower()} experiment for station {start_node} to {goal_node}")
+        avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
+        dijkstra_runtimes.append(avg_dijkstra_time)
+        a_star_runtimes.append(avg_a_star_time)
+        indices.append(index)
 
     # Plot results for the current scenario with the correct title
     plot_results(indices, dijkstra_runtimes, a_star_runtimes, title)
-
 
 
 
@@ -202,7 +200,20 @@ def main():
 
     # Scenario 2: Stations on adjacent lines
     adjacent_line_pairs = get_adjacent_line_pairs(connections_data)
-    run_and_plot_scenario(graph, nodes_info, adjacent_line_pairs, "Adjacent Line Scenario")
+
+    # Define the jump value
+    jump = 100
+
+    for index, (start_node, goal_node) in enumerate(adjacent_line_pairs):
+        # Only run experiments at multiples of the jump value
+        if index % jump == 0:
+            print(f"Running {index}-th experiment for station {start_node} to {goal_node}")
+            avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
+            dijkstra_runtimes.append(avg_dijkstra_time)
+            a_star_runtimes.append(avg_a_star_time)
+    
+    if dijkstra_runtimes:
+        plot_results(list(range(0, len(dijkstra_runtimes) * jump, jump)), dijkstra_runtimes, a_star_runtimes, "Adjacent Line Scenario")
 
     # Scenario 3: Stations requiring multiple transfers
     #transfer_pairs = get_station_pairs_requiring_transfers(connections_data)
