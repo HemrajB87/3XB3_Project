@@ -9,18 +9,30 @@ def bsp_solution(L, m):
     while m > 0:
         min_dist = float('inf')
         min_idx = -1
+        sec_min_dist = float('inf')  # Track the second smallest distance
+        sec_min_idx = -1
         
         for i in range(1, len(L) - 1):
             dist = L[i + 1] - L[i - 1]
             if dist < min_dist:
+                sec_min_dist = min_dist  # Update second smallest distance
+                sec_min_idx = min_idx
                 min_dist = dist
                 min_idx = i
+            elif dist < sec_min_dist:
+                sec_min_dist = dist
+                sec_min_idx = i
         
         if min_idx != -1:
-            L.pop(min_idx)
+            # Choose the station to remove based on the greater maximum distance
+            if bsp_value(L[:min_idx] + L[min_idx + 1:], m - 1) > bsp_value(L[:sec_min_idx] + L[sec_min_idx + 1:], m - 1):
+                L.pop(min_idx)
+            else:
+                L.pop(sec_min_idx)
             m -= 1
 
     return L
+
 
 
 
