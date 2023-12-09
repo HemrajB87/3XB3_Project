@@ -4,8 +4,9 @@ import random
 from itertools import combinations
 import sys
 sys.path.append('./Part 4 Refactor')
-from AstarAdapter import A_Star_Adapter as Astar
-from AstarAlgorithm import read_csv_file
+sys.path.append('./')
+from AstarAdapter import A_Star_Adapter as AstarA
+import AstarAlgorithm as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
 
@@ -15,7 +16,7 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
     for _ in range(num_measurements):
         # Run Dijkstra's algorithm
         start_time = time.time()
-        dijkstra_result = dijkstra(graph, start_node)
+        dijkstra_result = dijkstra.calculate_spl(dijkstra, graph, start_node, goal_node)
         dijkstra_time = time.time() - start_time
         dijkstra_times.append(dijkstra_time)
 
@@ -47,8 +48,8 @@ def plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes):
 
 def main():
     # Load CSV data
-    stations_data = read_csv_file('london_stations.csv')
-    connections_data = read_csv_file('london_connections.csv')
+    stations_data = Astar.read_csv_file('london_stations.csv')
+    connections_data = Astar.read_csv_file('london_connections.csv')
 
     # Create graph from CSV data
     graph = DirectedWeightedGraph()
