@@ -60,7 +60,6 @@ def dijkstra(G, source):
                 pred[neighbour] = current_node
     return dist
 
-
 def bellman_ford(G, source):
     pred = {} #Predecessor dictionary. Isn't returned, but here for your understanding
     dist = {} #Distance dictionary

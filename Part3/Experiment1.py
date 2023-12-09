@@ -16,14 +16,14 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
     for _ in range(num_measurements):
         # Run Dijkstra's algorithm
         start_time = time.time()
-        dijkstra_result = dijkstra.calculate_spl(dijkstra, graph, start_node, goal_node)
+        dijkstra.calculate_spl(dijkstra, graph, start_node, goal_node)
         dijkstra_time = time.time() - start_time
         dijkstra_times.append(dijkstra_time)
 
         # Run A* algorithm
         h = {node: Astar.heuristic(node, goal_node, nodes_info) for node in graph.adj}
         start_time = time.time()
-        a_star_result, _ = Astar.a_star(graph, start_node, goal_node, h)
+        Astar.a_star(graph, start_node, goal_node, h)
         a_star_time = time.time() - start_time
         a_star_times.append(a_star_time)
 
