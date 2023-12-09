@@ -11,6 +11,20 @@ from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
 from collections import deque
 
+def build_graph(connections_data):
+    graph = DirectedWeightedGraph()
+    for row in connections_data:
+        station1, station2, weight = int(row[0]), int(row[1]), int(row[3])
+        # Add nodes if they don't exist
+        if station1 not in graph.adj:
+            graph.add_node(station1)
+        if station2 not in graph.adj:
+            graph.add_node(station2)
+        # Add the edge
+        graph.add_edge(station1, station2, weight)
+    return graph
+
+
 #compute node pairs along a line
 def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
     dijkstra_times = []
@@ -51,7 +65,7 @@ def plot_results(indices, dijkstra_runtimes, a_star_runtimes, title):
     print(f"Title: {title}")
 
     plt.figure(figsize=(12, 8))
-    
+
     plt.plot(indices, dijkstra_runtimes, 'b-o', label='Dijkstra')
     plt.plot(indices, a_star_runtimes, 'r-x', label='A*')
     plt.xlabel('Experiment Index')
@@ -63,8 +77,26 @@ def plot_results(indices, dijkstra_runtimes, a_star_runtimes, title):
 
 
 def get_stations_on_same_line(connections_data, line_number):
-    stations = [int(row[0]) for row in connections_data if int(row[2]) == line_number]
-    return list(zip(stations[:-1], stations[1:]))
+    stations = []
+    current_line = None
+
+    for row in connections_data:
+        station1, station2, line = int(row[0]), int(row[1]), int(row[2])
+
+        # Check if the line number changes
+        if current_line is None:
+            current_line = line
+        elif current_line != line:
+            current_line = line
+            # Line changed, add a marker or do something to indicate the change
+            stations.append("Line Change")
+
+        # Check if the current line matches the specified line_number
+        if line == line_number:
+            stations.extend([station1, station2])
+
+    return stations
+
 
 def get_adjacent_line_pairs(connections_data):
     # Dictionary to hold the lines each station is on
@@ -151,7 +183,7 @@ def main():
     connections_data = Astar.read_csv_file('london_connections.csv')
 
     # Create graph from CSV data
-    graph = DirectedWeightedGraph()
+    graph = build_graph(connections_data)
     for row in stations_data:
         graph.add_node(int(row[0]))
 
