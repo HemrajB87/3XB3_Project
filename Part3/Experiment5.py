@@ -13,6 +13,7 @@ from final_project_part1 import DirectedWeightedGraph
 #need several transfer 
 def calculate_transfers(path):
     # Helper function to calculate the number of transfers in a path
+    print(f"path:{path}")
     transfers = 0
     prev_line = None
     for station in path:
@@ -28,7 +29,7 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
     for _ in range(num_measurements):
         # Run Dijkstra's algorithm
         start_time = time.time()
-        dijkstra_result = dijkstra(graph, start_node)
+        dijkstra.calculate_spl(dijkstra, graph, start_node, goal_node)
         dijkstra_time = time.time() - start_time
         dijkstra_times.append(dijkstra_time)
 
@@ -88,7 +89,7 @@ def main():
         avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
 
         # Check if the number of transfers exceeds the threshold
-        dijkstra_path = dijkstra(graph, start_node, goal_node)[1]
+        dijkstra_path = dijkstra.calculate_spl(dijkstra, graph, start_node, goal_node)
         if calculate_transfers(dijkstra_path) > transfer_threshold:
             dijkstra_runtimes.append(avg_dijkstra_time)
             a_star_runtimes.append(avg_a_star_time)

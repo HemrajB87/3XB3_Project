@@ -1,7 +1,11 @@
 import matplotlib.pyplot as plt
 import time
 import random
-from AstarAdapter import A_Star_Adapter as Astar
+from itertools import combinations
+import sys
+sys.path.append('./Part 4 Refactor')
+sys.path.append('./')
+import AstarAlgorithm as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
 

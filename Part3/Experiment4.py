@@ -17,7 +17,7 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
     for _ in range(num_measurements):
         # Run Dijkstra's algorithm
         start_time = time.time()
-        dijkstra_result = dijkstra(graph, start_node)
+        dijkstra.calculate_spl(dijkstra, graph, start_node, goal_node)
         dijkstra_time = time.time() - start_time
         dijkstra_times.append(dijkstra_time)
 
