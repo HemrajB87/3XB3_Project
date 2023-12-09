@@ -36,16 +36,18 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
 
 def plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes):
     plt.figure(figsize=(12, 8))
-
-    for i, (start_node, goal_node) in enumerate(zip(start_nodes, goal_nodes)):
-        plt.scatter(i, dijkstra_runtimes[i], c='b', marker='o', label=f'Dijkstra {start_node}-{goal_node}')
-        plt.scatter(i, a_star_runtimes[i], c='r', marker='x', label=f'A* {start_node}-{goal_node}')
+    # Plot all Dijkstra points with a single label
+    plt.scatter(range(len(dijkstra_runtimes)), dijkstra_runtimes, c='b', marker='o', label='Dijkstra')
+    # Plot all A* points with a single label
+    plt.scatter(range(len(a_star_runtimes)), a_star_runtimes, c='r', marker='x', label='A*')
 
     plt.xlabel('Experiment Index')
     plt.ylabel('Runtime (seconds)')
     plt.title('Dijkstra vs A* Runtime Comparison')
+    # Create a legend for the two labels we created above
     plt.legend()
     plt.show()
+
 
 def main():
     # Load CSV data
