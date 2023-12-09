@@ -36,15 +36,16 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
 
 def plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes):
     plt.figure(figsize=(12, 8))
-    # Plot all Dijkstra points with a single label
-    plt.scatter(range(len(dijkstra_runtimes)), dijkstra_runtimes, c='b', marker='o', label='Dijkstra')
-    # Plot all A* points with a single label
-    plt.scatter(range(len(a_star_runtimes)), a_star_runtimes, c='r', marker='x', label='A*')
+
+    # Plot Dijkstra runtimes as a blue line
+    plt.plot(range(len(dijkstra_runtimes)), dijkstra_runtimes, 'b-', label='Dijkstra')
+
+    # Plot A* runtimes as a red line
+    plt.plot(range(len(a_star_runtimes)), a_star_runtimes, 'r-', label='A*')
 
     plt.xlabel('Experiment Index')
     plt.ylabel('Runtime (seconds)')
     plt.title('Dijkstra vs A* Runtime Comparison')
-    # Create a legend for the two labels we created above
     plt.legend()
     plt.show()
 
