@@ -5,7 +5,6 @@ from itertools import combinations
 import sys
 sys.path.append('./Part 4 Refactor')
 sys.path.append('./')
-from AstarAdapter import A_Star_Adapter as AstarA
 import AstarAlgorithm as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
@@ -36,15 +35,18 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
 def plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes):
     plt.figure(figsize=(12, 8))
 
-    for i, (start_node, goal_node) in enumerate(zip(start_nodes, goal_nodes)):
-        plt.scatter(i, dijkstra_runtimes[i], c='b', marker='o', label=f'Dijkstra {start_node}-{goal_node}')
-        plt.scatter(i, a_star_runtimes[i], c='r', marker='x', label=f'A* {start_node}-{goal_node}')
+    # Plot Dijkstra runtimes as a blue line
+    plt.plot(range(len(start_nodes)), dijkstra_runtimes, 'b-', marker='o', label='Dijkstra')
+
+    # Plot A* runtimes as a red line
+    plt.plot(range(len(start_nodes)), a_star_runtimes, 'r-', marker='x', label='A*')
 
     plt.xlabel('Experiment Index')
     plt.ylabel('Runtime (seconds)')
     plt.title('Dijkstra vs A* Runtime Comparison')
     plt.legend()
     plt.show()
+
 
 def main():
     # Load CSV data
