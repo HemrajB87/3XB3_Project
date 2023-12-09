@@ -1,57 +1,61 @@
-def bsp_value(L, m):
-    n = len(L)
-    # The difference array stores the gaps between consecutive elements
-    diff = [L[i+1] - L[i] for i in range(n-1)]
-    #print(f"Differences between elements: {diff}")
-
-    # Initialize dp array where dp[i][j] is the minimum possible maximum gap
-    dp = [[float('inf')] * (m+1) for _ in range(n)]
-    
-    # Base case: no elements removed
-    for i in range(n-1):
-        dp[i][0] = max(dp[i-1][0], diff[i]) if i > 0 else diff[i]
-    
-    # Fill the dp array
-    for i in range(1, n):
-        for j in range(1, min(i+1, m+1)):
-            # Calculate new gap if this station is removed
-            if i < n - 1:
-                new_gap = diff[i-1] + diff[i] if i - j > 0 else diff[i-1]
-            else:
-                new_gap = diff[i-1]  # For the last station
-
-            # Update dp values considering both cases: removing or keeping the station
-            if i - j > 0:
-                dp[i][j] = min(dp[i][j], max(dp[i-1][j-1], new_gap))
-            dp[i][j] = min(dp[i][j], max(dp[i-1][j], diff[i-1]))
-
-            #print(f"dp[{i}][{j}]: {dp[i][j]}")
-
-
-            # Debugging print statements
-            #print(f"dp[{i}][{j}] after considering station {i+1}: {dp[i][j]}")
-
-
-    
-    #print(f"Final DP Table: {dp}")
-    return min(dp[i][m] for i in range(m, n))
 
 def bsp_solution(L, m):
     n = len(L)
-    max_gap = bsp_value(L, m)
-    solution = [L[0]]  # Always include the first element
+    L = L.copy()
+    
+    if n <= m or n - m == 1:
+        return L[:m]  # Return the first m stations
+    
+    while m > 0:
+        min_dist = float('inf')
+        min_idx = -1
+        
+        for i in range(1, len(L) - 1):
+            dist = L[i + 1] - L[i - 1]
+            if dist < min_dist:
+                min_dist = dist
+                min_idx = i
+        
+        if min_idx != -1:
+            L.pop(min_idx)
+            m -= 1
 
-    # Consider elements from the second to the second-last
-    last_added = L[0]
-    for i in range(1, n - 1):
-        if L[i] - last_added + 1 <= max_gap and m > 0:
-            m -= 1  # Remove this element
-        else:
-            solution.append(L[i])  # Keep this element
-            last_added = L[i]
+    return L
 
-    solution.append(L[-1])  # Always include the last element
-    return solution
+
+
+def bsp_value(L, m):
+    n = len(L)
+    
+    if n <= m:
+        return float('inf')
+    elif m == 0:
+        min_dist = float('inf')
+        for i in range(1, n):
+            min_dist = min(min_dist, L[i] - L[i - 1])
+        return min_dist
+    else:
+        first_idx = 0
+        sec_idx = 0
+        min_dist = float('inf')
+        
+        for i in range(1, n):
+            if L[i] - L[i - 1] < min_dist:
+                min_dist = L[i] - L[i - 1]
+                first_idx = i - 1
+                sec_idx = i
+        
+        return max(
+            bsp_value(L[:first_idx] + L[first_idx + 1:], m - 1),
+            bsp_value(L[:sec_idx] + L[sec_idx + 1:], m - 1)
+        )
+
+# Example usage:
+L = [2, 4, 6, 7, 10, 14]
+m = 2
+print("bsp_value:", bsp_value(L, m))
+print("bsp_solution:", bsp_solution(L, m))
+
 
 
 
@@ -83,7 +87,8 @@ test_cases = [
 for i, (L, m) in enumerate(test_cases):
     value = bsp_value(L, m)
     solution = bsp_solution(L, m)
+    lengthcheck = (len(solution) == len(L)-m)
+    print(lengthcheck)
     print(f"Test Case {i+1}: L = {L}, m = {m}")
     print(f"  Value: {value}")
     print(f"  Solution: {solution}\n")
-

@@ -1,56 +1,57 @@
-def bsp_solution(L, m):
-    n = len(L)
-    
-    if n <= m or n - m == 1:
-        return L.copy()  # Return a copy of the list to avoid modifying the input list
-    
-    result = bsp_value(L, m)
-    i = 1
-    count = 0
-    
-    while i < len(L) and count < m:
-        if L[i] - L[i - 1] < result:
-            if i == len(L) - 1:
-                L.pop(i - 1)
-            else:
-                L.pop(i)
-            count += 1
-        else:
-            i += 1
-
-    return L
-
 def bsp_value(L, m):
     n = len(L)
-    
-    if n <= m:
-        return L[-1] - L[0]  # If we can remove all but one station, return the maximum distance.
-    elif m == 0:
-        min_dist = float('inf')
-        for i in range(1, n):
-            min_dist = min(min_dist, L[i] - L[i - 1])
-        return min_dist
-    else:
-        first_idx = 0
-        sec_idx = 0
-        min_dist = float('inf')
-        
-        for i in range(1, n):
-            if L[i] - L[i - 1] < min_dist:
-                min_dist = L[i] - L[i - 1]
-                first_idx = i - 1
-                sec_idx = i
-        
-        return max(
-            bsp_value(L[:first_idx] + L[first_idx + 1:], m - 1),
-            bsp_value(L[:sec_idx] + L[sec_idx + 1:], m - 1)
-        )
+    # The difference array stores the gaps between consecutive elements
+    diff = [L[i+1] - L[i] for i in range(n-1)]
+    #print(f"Differences between elements: {diff}")
 
-# Example usage:
-L = [1, 2]
-m = 1
-print("bsp_value:", bsp_value(L, m))
-print("bsp_solution:", bsp_solution(L, m))
+    # Initialize dp array where dp[i][j] is the minimum possible maximum gap
+    dp = [[float('inf')] * (m+1) for _ in range(n)]
+    
+    # Base case: no elements removed
+    for i in range(n-1):
+        dp[i][0] = max(dp[i-1][0], diff[i]) if i > 0 else diff[i]
+    
+    # Fill the dp array
+    for i in range(1, n):
+        for j in range(1, min(i+1, m+1)):
+            # Calculate new gap if this station is removed
+            if i < n - 1:
+                new_gap = diff[i-1] + diff[i] if i - j > 0 else diff[i-1]
+            else:
+                new_gap = diff[i-1]  # For the last station
+
+            # Update dp values considering both cases: removing or keeping the station
+            if i - j > 0:
+                dp[i][j] = min(dp[i][j], max(dp[i-1][j-1], new_gap))
+            dp[i][j] = min(dp[i][j], max(dp[i-1][j], diff[i-1]))
+
+            #print(f"dp[{i}][{j}]: {dp[i][j]}")
+
+
+            # Debugging print statements
+            #print(f"dp[{i}][{j}] after considering station {i+1}: {dp[i][j]}")
+
+
+    
+    #print(f"Final DP Table: {dp}")
+    return min(dp[i][m] for i in range(m, n))
+
+def bsp_solution(L, m):
+    n = len(L)
+    max_gap = bsp_value(L, m)
+    solution = [L[0]]  # Always include the first element
+
+    # Consider elements from the second to the second-last
+    last_added = L[0]
+    for i in range(1, n - 1):
+        if L[i] - last_added + 1 <= max_gap and m > 0:
+            m -= 1  # Remove this element
+        else:
+            solution.append(L[i])  # Keep this element
+            last_added = L[i]
+
+    solution.append(L[-1])  # Always include the last element
+    return solution
 
 
 
