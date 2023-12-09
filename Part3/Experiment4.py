@@ -5,7 +5,7 @@ from AstarAdapter import A_Star_Adapter as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
 
-#Compute random 500 node pairs
+#Compute node pairs along two lines that are adjacent to each other
 def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
     dijkstra_times = []
     a_star_times = []
@@ -61,9 +61,24 @@ def main():
     # Run experiments
     dijkstra_runtimes = []
     a_star_runtimes = []
-    num_pairs = 500
-    start_goal_pairs = random.sample(list(graph.adj.keys()), num_pairs)
+
+    # Specify the start and end node indices for the first line
+    start_index_line1 = 1
+    end_index_line1 = 15
     
+    # Specify the start and end node indices for the second line (adjacent to the first line)
+    start_index_line2 = 16
+    end_index_line2 = 30
+    
+    # Generate node pairs along the first line
+    start_goal_pairs_line1 = [(i, i+1) for i in range(start_index_line1, end_index_line1)]
+
+    # Generate node pairs along the second line
+    start_goal_pairs_line2 = [(i, i+1) for i in range(start_index_line2, end_index_line2)]
+
+    # Combine the two lines into a single list
+    start_goal_pairs = start_goal_pairs_line1 + start_goal_pairs_line2
+
     for start_goal_pair in start_goal_pairs:
         start_node, goal_node = start_goal_pair
         print(f"Running experiment for station {start_node} and goal node {goal_node}")

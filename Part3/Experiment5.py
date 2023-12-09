@@ -5,7 +5,18 @@ from AstarAdapter import A_Star_Adapter as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
 
-#Compute random 500 node pairs
+#need several transfer 
+def calculate_transfers(path):
+    # Helper function to calculate the number of transfers in a path
+    transfers = 0
+    prev_line = None
+    for station in path:
+        line = station // 100  # Assuming stations are numbered with a line identifier in the hundreds place
+        if prev_line is not None and prev_line != line:
+            transfers += 1
+        prev_line = line
+    return transfers
+
 def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
     dijkstra_times = []
     a_star_times = []
@@ -61,18 +72,24 @@ def main():
     # Run experiments
     dijkstra_runtimes = []
     a_star_runtimes = []
-    num_pairs = 500
-    start_goal_pairs = random.sample(list(graph.adj.keys()), num_pairs)
-    
-    for start_goal_pair in start_goal_pairs:
-        start_node, goal_node = start_goal_pair
-        print(f"Running experiment for station {start_node} and goal node {goal_node}")
+
+    # Specify the number of measurements and the threshold for transfers
+    num_measurements = 500
+    transfer_threshold = 2  # Adjust this threshold as needed
+
+    # Generate random node pairs until we have enough pairs with the specified number of transfers
+    while len(dijkstra_runtimes) < num_measurements:
+        start_node, goal_node = random.sample(list(graph.adj.keys()), 2)
         avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
-        dijkstra_runtimes.append(avg_dijkstra_time)
-        a_star_runtimes.append(avg_a_star_time)
+
+        # Check if the number of transfers exceeds the threshold
+        dijkstra_path = dijkstra(graph, start_node, goal_node)[1]
+        if calculate_transfers(dijkstra_path) > transfer_threshold:
+            dijkstra_runtimes.append(avg_dijkstra_time)
+            a_star_runtimes.append(avg_a_star_time)
 
     # Plot results
-    plot_results(start_goal_pairs, start_goal_pairs, dijkstra_runtimes, a_star_runtimes)
+    plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes)
 
 if __name__ == "__main__":
     main()
