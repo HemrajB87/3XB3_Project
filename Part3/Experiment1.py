@@ -5,6 +5,7 @@ from itertools import combinations
 import sys
 sys.path.append('./Part 4 Refactor')
 from AstarAdapter import A_Star_Adapter as Astar
+from AstarAlgorithm import read_csv_file
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
 
@@ -46,8 +47,8 @@ def plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes):
 
 def main():
     # Load CSV data
-    stations_data = Astar.read_csv_file('london_stations.csv')
-    connections_data = Astar.read_csv_file('london_connections.csv')
+    stations_data = read_csv_file('london_stations.csv')
+    connections_data = read_csv_file('london_connections.csv')
 
     # Create graph from CSV data
     graph = DirectedWeightedGraph()
