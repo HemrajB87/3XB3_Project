@@ -24,7 +24,6 @@ def build_graph(connections_data):
         graph.add_edge(station1, station2, weight)
     return graph
 
-
 #compute node pairs along a line
 def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
     dijkstra_times = []
@@ -66,8 +65,8 @@ def plot_results(indices, dijkstra_runtimes, a_star_runtimes, title):
 
     plt.figure(figsize=(12, 8))
 
-    plt.plot(indices, dijkstra_runtimes, 'b-o', label='Dijkstra')
-    plt.plot(indices, a_star_runtimes, 'r-x', label='A*')
+    plt.plot(indices, dijkstra_runtimes, label='Dijkstra')
+    plt.plot(indices, a_star_runtimes, label='A*')
     plt.xlabel('Experiment Index')
     plt.ylabel('Runtime (seconds)')
     plt.title(title)
@@ -88,14 +87,13 @@ def get_stations_on_same_line(connections_data, line_number):
             current_line = line
         elif current_line != line:
             current_line = line
-            # Line changed, add a marker or do something to indicate the change
-            stations.append("Line Change")
 
         # Check if the current line matches the specified line_number
         if line == line_number:
-            stations.extend([station1, station2])
+            stations.append((station1, station2))
 
     return stations
+
 
 
 def get_adjacent_line_pairs(connections_data):
@@ -125,12 +123,11 @@ def get_station_pairs_requiring_transfers(connections_data):
     graph = build_graph(connections_data)
 
     # Find all unique station pairs
-    stations = list(graph.nodes())
-    all_station_pairs = itertools.combinations(stations, 2)
+    stations = list(graph.adj.keys())  # Use the keys of the adjacency dictionary
 
     # Find station pairs requiring transfers
     transfer_pairs = []
-    for station1, station2 in all_station_pairs:
+    for station1, station2 in itertools.combinations(stations, 2):
         if not is_direct_path(graph, station1, station2):
             transfer_pairs.append((station1, station2))
 
@@ -197,17 +194,17 @@ def main():
     dijkstra_runtimes = []
     a_star_runtimes = []
 
-# Scenario 1: Stations on the same line
-    same_line_stations = get_stations_on_same_line(connections_data, 1)
-    run_and_plot_scenario(graph, nodes_info, same_line_stations, "Same Line Scenario")
+    # Scenario 1: Stations on the same line
+    #same_line_stations = get_stations_on_same_line(connections_data, 1)
+    #run_and_plot_scenario(graph, nodes_info, same_line_stations, "Same Line Scenario")
 
     # Scenario 2: Stations on adjacent lines
     adjacent_line_pairs = get_adjacent_line_pairs(connections_data)
     run_and_plot_scenario(graph, nodes_info, adjacent_line_pairs, "Adjacent Line Scenario")
 
     # Scenario 3: Stations requiring multiple transfers
-    transfer_pairs = get_station_pairs_requiring_transfers(connections_data)
-    run_and_plot_scenario(graph, nodes_info, transfer_pairs, "Transfer Scenario")
+    #transfer_pairs = get_station_pairs_requiring_transfers(connections_data)
+    #run_and_plot_scenario(graph, nodes_info, transfer_pairs, "Transfer Scenario")
 
 if __name__ == "__main__":
     main()
