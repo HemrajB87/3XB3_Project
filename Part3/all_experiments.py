@@ -199,7 +199,7 @@ def main():
     #run_and_plot_scenario(graph, nodes_info, same_line_stations, "Same Line Scenario")
 
     # Scenario 2: Stations on adjacent lines
-    adjacent_line_pairs = get_adjacent_line_pairs(connections_data)
+    '''adjacent_line_pairs = get_adjacent_line_pairs(connections_data)
 
     # Define the jump value
     jump = 100
@@ -214,10 +214,10 @@ def main():
     
     if dijkstra_runtimes:
         plot_results(list(range(0, len(dijkstra_runtimes) * jump, jump)), dijkstra_runtimes, a_star_runtimes, "Adjacent Line Scenario")
-
+'''
     # Scenario 3: Stations requiring multiple transfers
-    #transfer_pairs = get_station_pairs_requiring_transfers(connections_data)
-    #run_and_plot_scenario(graph, nodes_info, transfer_pairs, "Transfer Scenario")
+    transfer_pairs = get_station_pairs_requiring_transfers(connections_data)
+    run_and_plot_scenario(graph, nodes_info, transfer_pairs, "Transfer Scenario")
 
 if __name__ == "__main__":
     main()
