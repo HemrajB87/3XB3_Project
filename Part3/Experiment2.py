@@ -1,18 +1,22 @@
 import matplotlib.pyplot as plt
 import time
 import random
-from AstarAdapter import A_Star_Adapter as Astar
+from itertools import combinations
+import sys
+sys.path.append('./Part 4 Refactor')
+sys.path.append('./')
+import AstarAlgorithm as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph
 
-#Compute random 500 node pairs
+# Compute random 500 node pairs
 def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1):
     dijkstra_times = []
     a_star_times = []
     for _ in range(num_measurements):
         # Run Dijkstra's algorithm
         start_time = time.time()
-        dijkstra_result = dijkstra(graph, start_node)
+        dijkstra_result = dijkstra.calculate_spl(dijkstra, graph, start_node, goal_node)
         dijkstra_time = time.time() - start_time
         dijkstra_times.append(dijkstra_time)
 
@@ -32,15 +36,18 @@ def run_experiment(graph, start_node, goal_node, nodes_info, num_measurements=1)
 def plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes):
     plt.figure(figsize=(12, 8))
 
-    for i, (start_node, goal_node) in enumerate(zip(start_nodes, goal_nodes)):
-        plt.scatter(i, dijkstra_runtimes[i], c='b', marker='o', label=f'Dijkstra {start_node}-{goal_node}')
-        plt.scatter(i, a_star_runtimes[i], c='r', marker='x', label=f'A* {start_node}-{goal_node}')
+    # Plot Dijkstra runtimes as a blue line
+    plt.plot(range(len(start_nodes)), dijkstra_runtimes, 'b-', marker='o', label='Dijkstra')
+
+    # Plot A* runtimes as a red line
+    plt.plot(range(len(start_nodes)), a_star_runtimes, 'r-', marker='x', label='A*')
 
     plt.xlabel('Experiment Index')
     plt.ylabel('Runtime (seconds)')
     plt.title('Dijkstra vs A* Runtime Comparison')
     plt.legend()
     plt.show()
+
 
 def main():
     # Load CSV data
@@ -61,18 +68,18 @@ def main():
     # Run experiments
     dijkstra_runtimes = []
     a_star_runtimes = []
-    num_pairs = 500
-    start_goal_pairs = random.sample(list(graph.adj.keys()), num_pairs)
-    
-    for start_goal_pair in start_goal_pairs:
-        start_node, goal_node = start_goal_pair
+    start_nodes = [1, 10, 20]  # Specify specific start nodes
+    goal_nodes = [5, 15, 25]  # Specify specific goal nodes
+
+    # Iterate over specified start and goal nodes
+    for start_node, goal_node in zip(start_nodes, goal_nodes):
         print(f"Running experiment for station {start_node} and goal node {goal_node}")
         avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
         dijkstra_runtimes.append(avg_dijkstra_time)
         a_star_runtimes.append(avg_a_star_time)
 
     # Plot results
-    plot_results(start_goal_pairs, start_goal_pairs, dijkstra_runtimes, a_star_runtimes)
+    plot_results(start_nodes, goal_nodes, dijkstra_runtimes, a_star_runtimes)
 
 if __name__ == "__main__":
     main()
