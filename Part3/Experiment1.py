@@ -3,7 +3,7 @@ import time
 import random
 from itertools import combinations
 import sys
-sys.path.append('./')
+sys.path.append('./Part 4 Refactor')
 from AstarAdapter import A_Star_Adapter as Astar
 from Dijkstra import Dijkstra as dijkstra
 from final_project_part1 import DirectedWeightedGraph

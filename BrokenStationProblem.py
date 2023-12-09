@@ -72,7 +72,7 @@ print("bsp_solution:", bsp_solution(L, m))
 
 
 # List of test cases
-test_cases = [
+'''test_cases = [
     ([1, 2, 3, 4, 5], 2),
     ([1, 3, 6, 10, 15], 1),
     ([5, 5, 5, 5, 5], 2),
@@ -103,4 +103,4 @@ for i, (L, m) in enumerate(test_cases):
     print(lengthcheck)
     print(f"Test Case {i+1}: L = {L}, m = {m}")
     print(f"  Value: {value}")
-    print(f"  Solution: {solution}\n")
+    print(f"  Solution: {solution}\n")'''
