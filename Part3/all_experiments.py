@@ -157,20 +157,22 @@ def is_direct_path(graph, start, end):
     # If BFS completes without finding the end station, return False
     return False
 
-def run_and_plot_scenario(graph, nodes_info, station_pairs, title):
+def run_and_plot_scenario(graph, nodes_info, station_pairs, title, jump=1):
     dijkstra_runtimes = []
     a_star_runtimes = []
     indices = []
 
     for index, (start_node, goal_node) in enumerate(station_pairs):
-        print(f"Running {title.lower()} experiment for station {start_node} to {goal_node}")
-        avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
-        dijkstra_runtimes.append(avg_dijkstra_time)
-        a_star_runtimes.append(avg_a_star_time)
-        indices.append(index)
+        if index % jump == 0:  # Check if the index is a multiple of 'jump'
+            print(f"Running {title.lower()} experiment for station {start_node} to {goal_node}")
+            avg_dijkstra_time, avg_a_star_time = run_experiment(graph, start_node, goal_node, nodes_info)
+            dijkstra_runtimes.append(avg_dijkstra_time)
+            a_star_runtimes.append(avg_a_star_time)
+            indices.append(index)
 
     # Plot results for the current scenario with the correct title
     plot_results(indices, dijkstra_runtimes, a_star_runtimes, title)
+
 
 
 
